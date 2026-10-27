@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FigCraft Studio — Open-Source Offline Interface Design & Prototyping</title>
+  <meta name="description" content="A clean-room, native web interface design and prototyping tool. 100% offline, zero subscriptions, persistent scene graph, auto-layout, vector pen, master components, and interactive prototypes.">
+  <link rel="icon" type="image/png" href="assets/figcraft-logo.png">
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Design System & Styles -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/canvas.css">
+  <link rel="stylesheet" href="css/panels.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- 1. Top Global Navigation Toolbar -->
+    <header class="top-toolbar">
+      <div class="toolbar-left">
+        <div class="app-branding">
+          <img src="assets/figcraft-logo.png" alt="FigCraft Logo" style="width: 24px; height: 24px; border-radius: 6px; object-fit: cover;">
+          <span>FigCraft Studio</span>
+        </div>
+        <select id="sample-file-select" class="sample-select-dropdown" title="Switch Official FigCraft Design File">
+          <option value="ridgeline-app" selected>📱 ridgeline-app.figcraft (App & Map)</option>
+          <option value="ridgeline-onboarding">⚡ ridgeline-onboarding.figcraft (Prototype Flow)</option>
+          <option value="ridgeline-design-system">🎨 ridgeline-design-system.figcraft (Foundations)</option>
+          <option value="ridgeline-studio-dashboard">📊 ridgeline-studio-dashboard.figcraft (Analytics)</option>
+          <option value="glass-and-vectors">💎 glass-and-vectors.figcraft (Vector Art)</option>
+        </select>
+        <input type="text" id="project-title" class="file-title-input" value="ridgeline-app.figcraft" title="Rename project">
+        <div class="offline-badge" data-tooltip="100% Client-Side • Zero Server Dependency">
+          <span class="dot-pulse"></span>
+          <span>Offline Core</span>
+        </div>
+      </div>
+
+      <!-- Center: Core Tools (Select, Frame, Rectangle, Ellipse, Text, Vector Pen) -->
+      <div class="toolbar-center">
+        <div class="tool-group">
+          <button class="tool-btn active" data-tool="select" data-tooltip="Select & Move (V)" id="tool-select">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 3 7 18 3-7 7-3L3 3z"/></svg>
+          </button>
+          <button class="tool-btn" data-tool="frame" data-tooltip="Frame Presets (F)" id="tool-frame">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+          </button>
+          <button class="tool-btn" data-tool="rectangle" data-tooltip="Rectangle (R)" id="tool-rect">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+          </button>
+          <button class="tool-btn" data-tool="ellipse" data-tooltip="Ellipse (O)" id="tool-ellipse">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+          </button>
+          <button class="tool-btn" data-tool="text" data-tooltip="Text Layer (T)" id="tool-text">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+          </button>
+          <button class="tool-btn" data-tool="pen" data-tooltip="Vector Pen Tool (P)" id="tool-pen">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><circle cx="11" cy="11" r="2"/></svg>
+          </button>
+        </div>
+
+        <div class="boolean-group" id="boolean-controls" title="Boolean Operations">
+          <button class="boolean-btn" id="btn-bool-union" title="Union Selection (Boolean Union)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h9v4h7v12H9v-4H4V4z"/><path d="M13 8v5a1 1 0 0 1-1 1H8" stroke-dasharray="2 2"/></svg>
+          </button>
+          <button class="boolean-btn" id="btn-bool-subtract" title="Subtract Selection (Boolean Subtract)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="9" height="9" rx="1" fill="currentColor" fill-opacity="0.3"/><rect x="11" y="11" width="9" height="9" rx="1"/></svg>
+          </button>
+          <button class="boolean-btn" id="btn-bool-intersect" title="Intersect Selection (Boolean Intersect)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="10" height="10" rx="1"/><rect x="10" y="10" width="10" height="10" rx="1"/><rect x="10" y="10" width="4" height="4" fill="currentColor"/></svg>
+          </button>
+          <button class="boolean-btn" id="btn-bool-exclude" title="Exclude Overlap (Boolean Exclude)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h10v6h-4v4H4V4zm6 6h4v4h-4v-4zm4 4h6v6h-6v-6z" fill="currentColor" fill-opacity="0.35"/></svg>
+          </button>
+        </div>
+
+        <!-- Layout Grid Toggle -->
+        <button class="action-btn" id="btn-toggle-grid" title="Toggle 12-Column Layout Grid (Shift+G)">
+          <span>▦ 12-Col Grid</span>
+        </button>
+
+        <!-- Master Component & Tokens Tools -->
+        <button class="component-btn" id="btn-create-component" title="Create Component (Ctrl+Alt+K)">
+          <span>❖ Component</span>
+        </button>
+
+        <button class="action-btn" id="btn-tokens-modal" title="Design Tokens & Theme Variables">
+          <span>🎨 Theme Variables</span>
+        </button>
+
+        <!-- Mode Switcher (Design / Prototype / Dev Mode) -->
+        <div class="mode-switch-tabs">
+          <button class="mode-tab active" data-mode="design" id="tab-design">Design</button>
+          <button class="mode-tab" data-mode="prototype" id="tab-prototype">Prototype</button>
+          <button class="mode-tab" data-mode="dev" id="tab-dev">Dev Mode</button>
+        </div>
+      </div>
+
+      <!-- Right: Actions & Multiplayer Collab -->
+      <div class="toolbar-right">
+        <!-- Live Multiplayer Avatars (Matching FigCraft Shot-7 Collab) -->
+        <div class="collab-avatars-group" title="Live Session: 3 Participants (P2P Mesh)">
+          <div class="collab-avatar user-priya" title="Priya Nair (Spotlighting)">P</div>
+          <div class="collab-avatar user-jonas" title="Jonas Ortiz">J</div>
+          <div class="collab-avatar user-self" title="You">Y</div>
+        </div>
+
+        <button class="action-btn" id="btn-cmd-palette" title="Command Palette (Ctrl+K)">
+          <span>⌘K</span>
+        </button>
+
+        <input type="file" id="project-file-input" accept=".figcraft,.json" style="display: none;">
+        <button class="action-btn" id="btn-open-project" title="Open .figcraft from local disk">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+          <span>Open</span>
+        </button>
+        <button class="action-btn" id="btn-save-project" title="Save native .figcraft file">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          <span>Save</span>
+        </button>
+        <button class="action-btn prototype-play" id="btn-present" title="Run Clickable Prototype">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Present</span>
+        </button>
+
+        <!-- Export Dropdown -->
+        <button class="action-btn primary" id="btn-export-svg" title="Export Clean SVG Vector File">
+          <span>SVG</span>
+        </button>
+        <button class="action-btn primary" id="btn-export-png" title="Export Hi-DPI PNG">
+          <span>PNG 2x</span>
+        </button>
+
+        <a href="https://fondpeace.com" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-decoration: none; color: #0d99ff; border-color: rgba(13, 153, 255, 0.4); font-weight: 600; margin-left: 4px;" title="Visit FondPeace.com">
+          <span>FondPeace.com ↗</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- 2. Workspace Body (Left Sidebar + Infinite Canvas + Right Inspector) -->
+    <main class="workspace-layout">
+      
+      <!-- Left Sidebar: Layers Tree & Assets Panel -->
+      <aside class="left-sidebar">
+        <!-- Tab switcher for Layers vs Assets (Matching FigCraft Shot-2) -->
+        <div class="sidebar-tab-switch">
+          <button class="sidebar-tab-btn active" id="btn-tab-layers">Layers</button>
+          <button class="sidebar-tab-btn" id="btn-tab-assets">Assets (5)</button>
+        </div>
+
+        <div class="layer-tree-container" id="layers-tree">
+          <!-- Dynamically populated scene graph nodes -->
+        </div>
+
+        <!-- Component Assets Library Panel -->
+        <div class="assets-panel-container" id="assets-library-panel" style="display: none;">
+          <div class="assets-category-title">RIDGELINE DESIGN SYSTEM</div>
+          <div class="asset-card" data-component="button-primary" title="Insert Button Instance">
+            <div class="asset-thumb-preview">
+              <span class="preview-btn-mock">Start hike 🥾</span>
+            </div>
+            <div class="asset-meta">
+              <span class="asset-name">❖ Button (9 Variants)</span>
+              <span class="asset-variants">Primary • Tonal • Outline</span>
+            </div>
+          </div>
+          <div class="asset-card" data-component="difficulty-pill" title="Insert Difficulty Tag">
+            <div class="asset-thumb-preview">
+              <span class="preview-pill-mock">Moderate</span>
+            </div>
+            <div class="asset-meta">
+              <span class="asset-name">❖ Difficulty Tag</span>
+              <span class="asset-variants">Easy • Moderate • Hard</span>
+            </div>
+          </div>
+          <div class="asset-card" data-component="trail-card" title="Insert Featured Trail Card">
+            <div class="asset-thumb-preview">
+              <div class="preview-card-mock">🏔️ Cascade Canyon</div>
+            </div>
+            <div class="asset-meta">
+              <span class="asset-name">❖ Featured Trail Card</span>
+              <span class="asset-variants">Auto Layout Card</span>
+            </div>
+          </div>
+          <div class="asset-card" data-component="tab-bar" title="Insert Translucent Tab Bar">
+            <div class="asset-thumb-preview">
+              <div class="preview-tabbar-mock">🏠 🔍 ♡ 👤</div>
+            </div>
+            <div class="asset-meta">
+              <span class="asset-name">❖ Frosted Tab Bar</span>
+              <span class="asset-variants">Glassmorphic Navigation</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center: Infinite Hardware Canvas Viewport -->
+      <section class="canvas-viewport" id="viewport-container">
+        <!-- Interactive Canvas Element -->
+        <canvas id="design-canvas"></canvas>
+
+        <!-- Live Spotlighting Collaboration Banner (Shot-7 Collab) -->
+        <div class="spotlight-collab-banner" id="spotlight-banner" style="display: none;">
+          <span class="spotlight-dot"></span>
+          <span><strong>Priya Nair</strong> is spotlighting · Cascade Canyon Trail</span>
+          <button class="follow-btn" id="btn-follow-spotlight">Follow</button>
+        </div>
+
+        <!-- Prototype Mode Notification Banner -->
+        <div class="prototype-status-banner" id="proto-banner">
+          <span>⚡ Prototype Mode: Click interactive cards to follow blue navigation curves!</span>
+        </div>
+
+        <!-- Floating Bottom Canvas Tools (Zoom, Hand) -->
+        <div class="canvas-floating-controls">
+          <button class="control-btn" id="btn-zoom-out" title="Zoom Out (-)">−</button>
+          <span class="zoom-level-text" id="zoom-text">100%</span>
+          <button class="control-btn" id="btn-zoom-in" title="Zoom In (+)">+</button>
+          <button class="control-btn" id="btn-zoom-reset" title="Reset View (Shift+0)">⊡</button>
+        </div>
+      </section>
+
+      <!-- Right Sidebar: Property Inspector & Dev Mode -->
+      <aside class="right-sidebar">
+        
+        <!-- Tab 1: Design Properties Inspector -->
+        <div id="design-props-section">
+          
+          <!-- Dimensions & Position -->
+          <div class="inspector-section">
+            <div class="section-header">
+              <span class="section-title">Dimensions & Position</span>
+              <span id="prop-node-badge" style="font-size: 10px; color: var(--accent-primary); font-weight: 600;"></span>
+            </div>
+            <div class="property-row">
+              <div class="input-with-label" style="flex: 1;">
+                <span class="input-prefix">X</span>
+                <input type="number" id="prop-x" value="0">
+              </div>
+              <div class="input-with-label" style="flex: 1;">
+                <span class="input-prefix">Y</span>
+                <input type="number" id="prop-y" value="0">
+              </div>
+            </div>
+            <div class="property-row">
+              <div class="input-with-label" style="flex: 1;">
+                <span class="input-prefix">W</span>
+                <input type="number" id="prop-w" value="100">
+              </div>
+              <div class="input-with-label" style="flex: 1;">
+                <span class="input-prefix">H</span>
+                <input type="number" id="prop-h" value="100">
+              </div>
+            </div>
+            <div class="property-row">
+              <div class="input-with-label" style="flex: 1;">
+                <span class="input-prefix">Radius</span>
+                <input type="number" id="prop-radius" value="0">
+              </div>
+              <div class="input-with-label" style="flex: 1;">
+                <span class="input-prefix">Opacity %</span>
+                <input type="number" id="prop-opacity" value="100" min="0" max="100">
+              </div>
+            </div>
+          </div>
+
+          <!-- Typography Controls (For Text Layers) -->
+          <div class="inspector-section" id="typography-section" style="display: none;">
+            <div class="section-header">
+              <span class="section-title">Typography</span>
+            </div>
+            <div class="property-row">
+              <input type="text" id="prop-text-content" class="color-input-text" placeholder="Text Content" style="width: 100%;">
+            </div>
+            <div class="property-row">
+              <div class="input-with-label" style="flex: 1;">
+                <span class="input-prefix">Size</span>
+                <input type="number" id="prop-font-size" value="16">
+              </div>
+              <div class="input-with-label" style="flex: 1;">
+                <span class="input-prefix">Weight</span>
+                <input type="text" id="prop-font-weight" value="600">
+              </div>
+            </div>
+          </div>
+
+          <!-- Auto-Layout Controls (For Frames & Components) -->
+          <div class="inspector-section" id="auto-layout-section">
+            <div class="section-header">
+              <span class="section-title">Auto Layout</span>
+              <input type="checkbox" id="toggle-auto-layout" style="cursor: pointer;">
+            </div>
+            <div id="auto-layout-details" style="display: none;">
+              <div class="property-row">
+                <span style="font-size: 11px; color: var(--text-secondary);">Direction</span>
+                <div class="auto-layout-pill-group" style="width: 140px;">
+                  <button class="pill-btn btn-al-dir active" data-dir="VERTICAL">↓ Column</button>
+                  <button class="pill-btn btn-al-dir" data-dir="HORIZONTAL">→ Row</button>
+                </div>
+              </div>
+              <div class="property-row">
+                <div class="input-with-label" style="flex: 1;">
+                  <span class="input-prefix">Gap</span>
+                  <input type="number" id="prop-al-gap" value="12">
+                </div>
+                <div class="input-with-label" style="flex: 1;">
+                  <span class="input-prefix">Padding</span>
+                  <input type="number" id="prop-al-padding" value="16">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fill & Color Palette -->
+          <div class="inspector-section">
+            <div class="section-header">
+              <span class="section-title">Fill</span>
+            </div>
+            <div class="fill-color-row">
+              <input type="color" id="prop-color-picker" class="color-swatch" value="#0d99ff">
+              <input type="text" id="prop-fill" class="color-input-text" value="#0d99ff">
+            </div>
+          </div>
+
+          <!-- Stroke / Border Controls -->
+          <div class="inspector-section">
+            <div class="section-header">
+              <span class="section-title">Stroke / Border</span>
+            </div>
+            <div class="fill-color-row" style="margin-bottom: 6px;">
+              <input type="color" id="prop-stroke-picker" class="color-swatch" value="#38bdf8">
+              <input type="text" id="prop-stroke" class="color-input-text" placeholder="none" value="">
+            </div>
+            <div class="property-row">
+              <div class="input-with-label" style="flex: 1;">
+                <span class="input-prefix">Width</span>
+                <input type="number" id="prop-stroke-width" value="1">
+              </div>
+              <div class="auto-layout-pill-group" style="flex: 1;">
+                <button class="pill-btn active" id="btn-stroke-solid">Solid</button>
+                <button class="pill-btn" id="btn-stroke-dashed">Dashed</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Export Preset -->
+          <div class="inspector-section">
+            <div class="section-header">
+              <span class="section-title">Quick Export</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="action-btn" id="btn-inspect-export-svg" style="flex: 1;">Export SVG</button>
+              <button class="action-btn primary" id="btn-inspect-export-png" style="flex: 1;">Export PNG</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Dev Mode Code Inspection Section -->
+        <div id="dev-code-section" style="display: none; padding: 14px;">
+          <div class="section-header">
+            <span class="section-title" style="color: #10b981;">⚡ Dev Mode Code Inspector</span>
+          </div>
+
+          <!-- Code Language Tabs: CSS, React Tailwind, SwiftUI, SVG -->
+          <div class="dev-mode-tabs">
+            <button class="dev-tab-btn active" data-lang="css" id="tab-lang-css">CSS</button>
+            <button class="dev-tab-btn" data-lang="react" id="tab-lang-react">React</button>
+            <button class="dev-tab-btn" data-lang="swiftui" id="tab-lang-swiftui">SwiftUI</button>
+            <button class="dev-tab-btn" data-lang="svg" id="tab-lang-svg">SVG</button>
+          </div>
+
+          <pre class="code-preview-block" id="dev-code-preview">/* Select any layer on canvas to inspect code */</pre>
+          <button class="action-btn primary" id="btn-copy-code" style="width: 100%; margin-top: 10px; justify-content: center;">
+            📋 Copy Snippet
+          </button>
+        </div>
+
+      </aside>
+    </main>
+
+    <!-- 3. Frame Presets Dropdown Flyout -->
+    <div class="presets-dropdown" id="frame-presets-dropdown">
+      <div style="font-size: 10px; color: var(--text-tertiary); font-weight: 700; margin-bottom: 6px; padding: 2px 8px;">SCREEN PRESETS</div>
+      <div class="preset-item" data-preset="iphone16">
+        <span>iPhone 16 Pro</span>
+        <span class="preset-dims">393 × 852</span>
+      </div>
+      <div class="preset-item" data-preset="pixel9">
+        <span>Google Pixel 9</span>
+        <span class="preset-dims">412 × 923</span>
+      </div>
+      <div class="preset-item" data-preset="macbook">
+        <span>MacBook Pro 16"</span>
+        <span class="preset-dims">1728 × 1117</span>
+      </div>
+      <div class="preset-item" data-preset="ipad">
+        <span>iPad Pro 12.9"</span>
+        <span class="preset-dims">1024 × 1366</span>
+      </div>
+      <div class="preset-item" data-preset="dribbble">
+        <span>Dribbble Shot</span>
+        <span class="preset-dims">1600 × 1200</span>
+      </div>
+      <div class="preset-item" data-preset="instagram">
+        <span>Instagram Post</span>
+        <span class="preset-dims">1080 × 1080</span>
+      </div>
+    </div>
+
+    <!-- 4. Command Palette Modal (Ctrl+K) -->
+    <div class="cmd-palette-backdrop" id="cmd-palette-backdrop">
+      <div class="cmd-palette-modal">
+        <div class="cmd-input-container">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="cmd-input" class="cmd-input" placeholder="Type a command or search action..." autocomplete="off">
+          <span style="font-size: 11px; color: var(--text-tertiary);">Esc to close</span>
+        </div>
+        <div class="cmd-results-list" id="cmd-results">
+          <!-- Dynamic Command Entries -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Design Tokens / Variables Modal -->
+    <div class="tokens-modal-backdrop" id="tokens-modal-backdrop">
+      <div class="tokens-modal">
+        <div class="tokens-header">
+          <span>🎨 Design Tokens & Variable Modes</span>
+          <button class="action-btn" id="btn-close-tokens">✕</button>
+        </div>
+        <div class="tokens-body">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 12px; font-weight: 600; color: var(--text-secondary);">Active Token Mode:</span>
+            <div class="auto-layout-pill-group" style="width: 140px;">
+              <button class="pill-btn active" id="btn-mode-dark">Dark Mode</button>
+              <button class="pill-btn" id="btn-mode-light">Light Mode</button>
+            </div>
+          </div>
+          <div id="tokens-list-container">
+            <!-- Populated from doc.variables -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Fullscreen Interactive Prototyping Modal -->
+    <div class="presentation-modal" id="presentation-modal">
+      <div class="presentation-header">
+        <div style="display: flex; align-items: center; gap: 8px; font-weight: 700;">
+          <span style="color: var(--accent-prototype);">🎬 FigCraft Prototype Player</span>
+          <span style="font-size: 11px; color: var(--text-tertiary);">(Interactive Flow)</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="action-btn" id="btn-restart-presentation">↺ Restart Flow</button>
+          <button class="action-btn" id="btn-close-presentation">✕ Close Player</button>
+        </div>
+      </div>
+      <div class="presentation-viewport" id="presentation-viewport">
+        <!-- Live device frame injected here -->
+      </div>
+    </div>
+
+    <!-- 7. Toast Notification -->
+    <div class="toast-notification" id="toast-notify">Action executed</div>
+
+  </div>
+
+  <!-- Main ES6 Application Engine -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "figcraft-studio",
+  "version": "0.11.2",
+  "description": "Pure-Rust and Open Web Interface Design Suite with Model Context Protocol (MCP) support.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "python -m http.server 3030",
+    "test:lint": "node --check js/app.js && node --check js/engine/scene-graph.js && node --check js/engine/canvas-renderer.js && node --check js/engine/format-reader.js && node --check js/engine/auto-layout.js && node --check js/engine/export-engine.js && node --check js/engine/prototype-runner.js",
+    "test:samples": "node -e \"import('./js/engine/scene-graph.js').then(({ DocumentModel }) => import('./js/engine/format-reader.js').then(({ FormatReader }) => { const fs = require('fs'); ['ridgeline-app', 'ridgeline-onboarding', 'ridgeline-design-system', 'ridgeline-studio-dashboard', 'glass-and-vectors'].forEach(s => { const raw = JSON.parse(fs.readFileSync('official-samples/' + s + '.json', 'utf-8')); const doc = new DocumentModel(); new FormatReader(doc).parseDocument(raw, s + '.figcraft'); console.log('✓ Validated sample:', s); }); }))\""
+  },
+  "keywords": [
+    "design",
+    "figcraft",
+    "rust",
+    "vector",
+    "ui-design",
+    "prototyping",
+    "mcp",
+    "model-context-protocol"
+  ],
+  "author": "FigCraft Contributors",
+  "license": "MIT OR Apache-2.0"
+}
