@@ -1,0 +1,17 @@
+[package]
+name = "figcraft-ui-egui"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "FigCraft Native Immediate-Mode UI built with egui & eframe"
+
+[dependencies]
+figcraft-doc = { path = "../doc" }
+figcraft-engine = { path = "../engine" }
+figcraft-render = { path = "../render" }
+figcraft-format = { path = "../format" }
+figcraft-layout = { path = "../layout" }
+eframe = { workspace = true }
+egui = { workspace = true }
+rfd = { workspace = true }

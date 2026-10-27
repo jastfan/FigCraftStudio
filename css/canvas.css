@@ -1,0 +1,140 @@
+/* FigCraft Studio — Canvas & Viewport Styles */
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background: var(--bg-app);
+}
+
+.workspace-layout {
+  display: flex;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Canvas Viewport */
+.canvas-viewport {
+  flex: 1;
+  position: relative;
+  background-color: var(--bg-canvas);
+  overflow: hidden;
+  cursor: default;
+  outline: none;
+}
+
+.canvas-viewport.panning {
+  cursor: grab !important;
+}
+
+.canvas-viewport.panning:active {
+  cursor: grabbing !important;
+}
+
+.canvas-viewport.crosshair {
+  cursor: crosshair !important;
+}
+
+/* The Native Canvas Element */
+#design-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Floating Bottom Controls (Zoom, Pan, Hand, Centering) */
+.canvas-floating-controls {
+  position: absolute;
+  bottom: 16px;
+  right: calc(var(--right-sidebar-width) + 16px);
+  display: flex;
+  align-items: center;
+  background: rgba(32, 32, 36, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
+  box-shadow: var(--shadow-md);
+  z-index: 100;
+}
+
+.control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.control-btn:hover {
+  background: var(--bg-active);
+  color: var(--text-primary);
+}
+
+.control-btn.active {
+  background: var(--accent-primary-dim);
+  color: var(--accent-primary);
+}
+
+.zoom-level-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-primary);
+  padding: 0 6px;
+  min-width: 44px;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* Prototype Mode Indicator Bar */
+.prototype-status-banner {
+  display: none;
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(18, 18, 22, 0.92);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(13, 153, 255, 0.4);
+  color: #f1f5f9;
+  padding: 8px 18px;
+  border-radius: 24px;
+  font-size: 11px;
+  font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 16px rgba(13, 153, 255, 0.2);
+  z-index: 95;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.prototype-status-banner.visible {
+  display: flex;
+}
+
+/* Direct Text Edit Floating Overlay */
+#canvas-inline-editor {
+  display: none;
+  position: absolute;
+  z-index: 105;
+  outline: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  resize: none;
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.25;
+}

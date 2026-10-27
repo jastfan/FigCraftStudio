@@ -1,0 +1,16 @@
+[package]
+name = "figcraft-mcp"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "FigCraft Model Context Protocol (MCP) server for AI design agent automation"
+
+[dependencies]
+figcraft-doc = { path = "../doc" }
+figcraft-engine = { path = "../engine" }
+figcraft-format = { path = "../format" }
+figcraft-layout = { path = "../layout" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }

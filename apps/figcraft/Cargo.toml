@@ -1,0 +1,25 @@
+[package]
+name = "figcraft"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "FigCraft Native Desktop Application (Pure Rust, egui, eframe, tiny-skia)"
+
+[[bin]]
+name = "figcraft"
+path = "src/main.rs"
+
+[dependencies]
+figcraft-doc = { path = "../../crates/doc" }
+figcraft-engine = { path = "../../crates/engine" }
+figcraft-render = { path = "../../crates/render" }
+figcraft-format = { path = "../../crates/format" }
+figcraft-ui-egui = { path = "../../crates/ui-egui" }
+figcraft-mcp = { path = "../../crates/mcp" }
+
+eframe = { workspace = true }
+egui = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+rfd = { workspace = true }

@@ -1,0 +1,14 @@
+[package]
+name = "figcraft-collab-net"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "FigCraft Real-time Multiplayer Collaboration & Sync Networking"
+
+[dependencies]
+figcraft-doc = { path = "../doc" }
+figcraft-format = { path = "../format" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }

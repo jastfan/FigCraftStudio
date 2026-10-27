@@ -1,0 +1,14 @@
+[package]
+name = "figcraft-doc"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "FigCraft Document Engine: Immutable scene tree, nodes, styles, prototyping"
+
+[dependencies]
+figcraft-geom = { path = "../geom" }
+figcraft-color = { path = "../color" }
+figcraft-layout = { path = "../layout" }
+serde = { workspace = true }
+serde_json = { workspace = true }

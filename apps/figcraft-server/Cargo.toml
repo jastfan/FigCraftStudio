@@ -1,0 +1,16 @@
+[package]
+name = "figcraft-server"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "FigCraft Real-time Multiplayer Collaboration & Sync Server"
+
+[[bin]]
+name = "figcraft-server"
+path = "src/main.rs"
+
+[dependencies]
+figcraft-collab-net = { path = "../../crates/collab-net" }
+figcraft-doc = { path = "../../crates/doc" }
+tokio = { workspace = true }

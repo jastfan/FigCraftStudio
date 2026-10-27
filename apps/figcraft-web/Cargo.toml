@@ -1,0 +1,14 @@
+[package]
+name = "figcraft-web"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "FigCraft Web Application (WebAssembly / Web Studio)"
+
+[dependencies]
+figcraft-doc = { path = "../../crates/doc" }
+figcraft-format = { path = "../../crates/format" }
+figcraft-render = { path = "../../crates/render" }
+serde = { workspace = true }
+serde_json = { workspace = true }

@@ -1,0 +1,19 @@
+[package]
+name = "figcraft-cli"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "FigCraft Headless Command-Line Interface for automation, batch exports, and Dev Mode generation"
+
+[[bin]]
+name = "figcraft-cli"
+path = "src/main.rs"
+
+[dependencies]
+figcraft-doc = { path = "../../crates/doc" }
+figcraft-format = { path = "../../crates/format" }
+figcraft-render = { path = "../../crates/render" }
+figcraft-mcp = { path = "../../crates/mcp" }
+serde = { workspace = true }
+serde_json = { workspace = true }

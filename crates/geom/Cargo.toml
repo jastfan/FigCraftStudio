@@ -1,0 +1,11 @@
+[package]
+name = "figcraft-geom"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "FigCraft Geometry: Points, Rectangles, Bezier Paths & Affine Transforms"
+
+[dependencies]
+kurbo = { workspace = true, optional = true }
+serde = { workspace = true }

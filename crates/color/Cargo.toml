@@ -1,0 +1,10 @@
+[package]
+name = "figcraft-color"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "FigCraft Color Models: sRGB, Hex, Alpha Blending, Design Tokens"
+
+[dependencies]
+serde = { workspace = true }

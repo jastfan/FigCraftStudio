@@ -1,0 +1,15 @@
+[package]
+name = "figcraft-engine"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "FigCraft Engine: Unified Command Registry, Transaction Journal, Undo/Redo"
+
+[dependencies]
+figcraft-doc = { path = "../doc" }
+figcraft-geom = { path = "../geom" }
+figcraft-color = { path = "../color" }
+figcraft-layout = { path = "../layout" }
+serde = { workspace = true }
+serde_json = { workspace = true }
