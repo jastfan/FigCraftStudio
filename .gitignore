@@ -1,0 +1,26 @@
+# Rust & Cargo Artifacts
+target/
+**/*.rs.bk
+*.pdb
+*.d
+*.rlib
+*.rmeta
+Cargo.lock.orig
+Cargo.toml.orig
+
+# Node & Web Build Outputs
+node_modules/
+dist/
+build/
+out/
+.cache/
+
+# OS & IDE Files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+.env
+.env.*
